@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/home_3_line"
+        android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/navigation_transactions"
+        android:icon="@drawable/money_exchange"
+        android:title="@string/title_transactions" />
+
+    <item
+        android:id="@+id/navigation_carte"
+        android:icon="@drawable/bank_card_2_line_1_"
+        android:title="@string/title_carte" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/user"
+        android:title="@string/profile_notifications" />
+
+</menu>

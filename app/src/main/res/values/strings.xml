@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">AkibaPay</string>
+    <string name="logo">Logo</string>
+    <string name="details_logo">details Logo</string>
+    <string name="entrez_votr">
+        Enter your phone number
+    </string>
+    <string name="num_tel">Phone number</string>
+    <string name="ex_243_810_000_000">ex: +243 810 000 000</string>
+    <string name="je_veux_m_inscrire">I want to register</string>
+    <string name="login">Login</string>
+    <string name="buttonRetour">Back</string>
+    <string name="cr_er_un_co">Create an account</string>
+    <string name="nom">Nom</string>
+    <string name="post_nom">Post-nom</string>
+    <string name="Doe">ex : Doe</string>
+    <string name="John">ex : John</string>
+    <string name="nathan">ex : Nathan</string>
+    <string name="prenom">Prénom</string>
+    <string name="register">S\'inscrire</string>
+    <string name="confidentialites">J\'accepte les termes et conditions et la politique de confidentialité</string>
+    <string name="otp">Un SMS envoyé à votre numéro de mobile +243 000 000 000</string>
+    <string name="code6">Entrez le code à 6 chiffres</string>
+    <string name="renvoyer_le_code">Renvoyer le code : </string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_transactions">Transactions</string>
+    <string name="title_carte">Carte</string>
+    <string name="title_profile">Mon profil</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="profile_notifications">Mon Profil</string>
+    <string name="montant_jou">Montant journalier collecté</string>
+    <string name="some_id">0.00 $</string>
+    <string name="initier_une">Initier une collecte</string>
+    <string name="transfert_m">Transfert M-Money</string>
+    <string name="bonjour">Bonjour</string>
+    <string name="img">img</string>
+    <string name="derniers_mo">Derniers mouvements</string>
+    <string name="tous_voir">Tous voir</string>
+    <string name="walmart">Joe Doe - 0810 000 000</string>
+    <string name="today">Aujourd\'hui à</string>
+    <string name="some_ids">
+                $35.23
+            </string>
+    <string name="num_ro_de_t_l_phone">Numéro de téléphone</string>
+    <string name="valider_le_paiement">Valider le paiement</string>
+    <string name="num_expeditaire">Numéro Expéditaire</string>
+    <string name="valider_le_transfert">Valider le transfert</string>
+    <string name="d_tails_de_">Détails de paiement</string>
+    <string name="montant">Montant</string>
+    <string name="reference">Référence</string>
+    <string name="button">Signaler un problème</string>
+    <string name="revenir_l_accueil">Revenir à l’accueil</string>
+    <string name="mes_transac">Mes transactions</string>
+    <string name="mon_profi">Mon Profil</string>
+    <string name="chargement_en_cours">Chargement en cours...</string>
+    <string name="pin">Code PIN</string>
+</resources>

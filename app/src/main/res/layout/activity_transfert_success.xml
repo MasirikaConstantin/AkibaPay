@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TransfertSuccess">
+
+    <!-- Auto layout, grids, variables, and unit scale are not yet supported -->
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="230dp"
+        android:layout_height="151dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/success" />
+
+    <TextView
+        android:id="@+id/d_tails_de_"
+        android:layout_width="328dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="41dp"
+        android:layout_marginEnd="42dp"
+        android:gravity="top"
+        android:lineSpacingExtra="3sp"
+        android:text="@string/d_tails_de_"
+        android:textAppearance="@style/d_tails_de_"
+        android:textStyle="bold"
+        android:translationY="-1.68sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4"
+        app:layout_constraintVertical_bias="0.048" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.619"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/d_tails_de_">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/details"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/num_ro_de_t"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:lineSpacingExtra="3sp"
+                android:text="@string/num_ro_de_t_l_phone"
+                android:textAppearance="@style/num_ro_de_t"
+                android:translationY="-1.44sp" />
+
+            <TextView
+                android:id="@+id/some_id"
+                android:layout_width="296dp"
+                android:layout_height="18dp"
+                android:gravity="top"
+                android:lineSpacingExtra="3sp"
+                android:text="0810 000 000"
+                android:textAppearance="@style/num_gr"
+                android:translationY="-1.44sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/details"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/montant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:lineSpacingExtra="3sp"
+                android:text="@string/montant"
+                android:textAppearance="@style/num_ro_de_t"
+                android:translationY="-1.44sp"
+                tools:ignore="DuplicateIds" />
+
+            <TextView
+                android:id="@+id/some"
+                android:layout_width="296dp"
+                android:layout_height="18dp"
+                android:gravity="top"
+                android:lineSpacingExtra="3sp"
+                android:text="$ 0.0"
+                android:textAppearance="@style/num_gr"
+                android:translationY="-1.44sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/details"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/reference"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:lineSpacingExtra="3sp"
+                    android:text="@string/reference"
+                    android:textAppearance="@style/num_ro_de_t"
+                    android:translationY="-1.44sp"
+                    tools:ignore="DuplicateIds" />
+
+                <TextView
+                    android:id="@+id/refence_id"
+                    android:layout_width="296dp"
+                    android:layout_height="18dp"
+                    android:gravity="top"
+                    android:lineSpacingExtra="3sp"
+                    android:text="23010412432431"
+                    android:textAppearance="@style/num_gr"
+                    android:translationY="-1.44sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/copie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/num_tel"
+                android:src="@drawable/file_copy_line" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/title_transactions"
+            android:src="@drawable/flag_line" />
+
+        <TextView
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal|top"
+            android:lineSpacingExtra="3sp"
+            android:text="@string/button"
+            android:textAppearance="@style/button"
+            android:translationY="-1.68sp"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+            tools:layout_editor_absoluteX="128dp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+
+        android:id="@+id/btnHome"
+        android:layout_width="0dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:backgroundTint="@color/Secondary_1"
+        android:text="@string/revenir_l_accueil"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:cornerRadius="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout4" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

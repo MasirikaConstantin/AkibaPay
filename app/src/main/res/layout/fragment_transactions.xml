@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.transaction.TransactionsFragment">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp">
+        <TextView
+            android:id="@+id/mes_transac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mes_transac"
+            android:textAppearance="@style/mes_transac"
+            android:lineSpacingExtra="6sp"
+            android:translationY="-2.88sp"
+            android:gravity="top"
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+                <EditText
+                    android:id="@+id/editTextSearch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:hint="Rechercher trans  ..."
+                    android:background="@drawable/field"
+                    android:padding="12dp"
+                    android:drawableStart="@android:drawable/ic_menu_search"
+                    android:drawablePadding="8dp" />
+
+                <LinearLayout
+                    android:id="@+id/field"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:padding="12dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/field"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/equalizer_line"
+                        android:contentDescription="@string/title_transactions"/>
+                <TextView
+                    android:id="@+id/button"
+                    android:layout_width="42dp"
+                    android:layout_height="21dp"
+                    android:text="Filtrer"
+                    android:textAppearance="@style/button_tra"
+                    android:lineSpacingExtra="3sp"
+                    android:translationY="-1.68sp"
+                    android:gravity="center_horizontal|top"
+                    />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

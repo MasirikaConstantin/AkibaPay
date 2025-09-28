@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Icône loupe -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M15.5,14h-0.8l-0.3,-0.3
+            c1,-1.2 1.6,-2.7 1.6,-4.3
+            c0,-3.9 -3.1,-7 -7,-7
+            s-7,3.1 -7,7
+            s3.1,7 7,7
+            c1.6,0 3.1,-0.6 4.3,-1.6l0.3,0.3v0.8l5,4.9
+            L20.5,19l-5,-5zm-6.5,0
+            c-2.5,0 -4.5,-2 -4.5,-4.5
+            s2,-4.5 4.5,-4.5
+            s4.5,2 4.5,4.5
+            s-2,4.5 -4.5,4.5z"/>
+</vector>
