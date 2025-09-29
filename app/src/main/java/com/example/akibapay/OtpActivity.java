@@ -39,7 +39,7 @@ public class OtpActivity extends AppCompatActivity {
         otpTextView = findViewById(R.id.otp_view);
         timerText = findViewById(R.id.timer);
         errorButton = findViewById(R.id.button);
-        successButton = findViewById(R.id.button2);
+        successButton = findViewById(R.id.btnRegister);
     }
 
     private void setupOTPListener() {

@@ -1,6 +1,17 @@
 package com.example.akibapay.api;
 
+import com.example.akibapay.models.Devices;
+import com.example.akibapay.models.PaymentStatus;
+import com.example.akibapay.models.Payments;
+import com.example.akibapay.models.SessionStatus;
+import com.example.akibapay.models.Sessions;
+import com.example.akibapay.models.Users;
 import com.example.akibapay.request.LoginRequest;
+import com.example.akibapay.request.PaymentCallbackRequest;
+import com.example.akibapay.request.PaymentRequest;
+import com.example.akibapay.request.UpdatePasswordRequest;
+import com.example.akibapay.request.UpdateTypeValueRequest;
+import com.example.akibapay.request.UpdateUserRequest;
 
 import retrofit2.Call;
 import retrofit2.http.*;

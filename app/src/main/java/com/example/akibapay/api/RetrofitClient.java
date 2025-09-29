@@ -21,7 +21,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static final String BASE_URL = "https://your-api-domain.com/";
+    private static final String BASE_URL = "https://pos.brainstormtechs.com/";
     private static final int CACHE_SIZE = 10 * 1024 * 1024; // 10 MB
     private static final int TIMEOUT = 30; // 30 seconds
 

@@ -232,6 +232,37 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="1dp"
+                app:layout_gravity="fill_horizontal"
+                app:layout_row="4">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/confirm_pin"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etConfirmPin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Confirmer le PIN"
+                    android:inputType="numberPassword"
+                    android:maxLines="1"
+                    android:maxLength="4" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
             <!-- Ligne 5 - ->
             <LinearLayout
                 android:layout_width="match_parent"

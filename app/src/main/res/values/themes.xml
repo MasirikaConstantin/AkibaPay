@@ -6,6 +6,7 @@
 
         <item name="android:fontFamily">@font/sora</item>
         <item name="fontFamily">@font/sora</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="Theme.AkibaPay" parent="Base.Theme.AkibaPay" />
@@ -130,4 +131,10 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">#000000</item>
     </style>
+
+    <style name="RoundedImageView">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
 </resources>

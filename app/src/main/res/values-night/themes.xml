@@ -7,6 +7,8 @@
         <item name="android:fontFamily">@font/sora</item>
         <item name="fontFamily">@font/sora</item>
         <item name="colorOnPrimary">#FF000000</item>
+        <item name="android:textSize">12sp</item>
+
 
     </style>
     <style name="bonjour_nat">

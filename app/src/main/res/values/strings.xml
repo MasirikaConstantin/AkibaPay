@@ -6,7 +6,7 @@
         Enter your phone number
     </string>
     <string name="num_tel">Phone number</string>
-    <string name="ex_243_810_000_000">ex: +243 810 000 000</string>
+    <string name="ex_243_810_000_000">ex: 0810 000 000</string>
     <string name="je_veux_m_inscrire">I want to register</string>
     <string name="login">Login</string>
     <string name="buttonRetour">Back</string>
@@ -58,4 +58,11 @@
     <string name="mon_profi">Mon Profil</string>
     <string name="chargement_en_cours">Chargement en cours...</string>
     <string name="pin">Code PIN</string>
+    <string name="confirm_pin">Confirmer le PIN</string>
+    <string name="message_succes">Votre compte a été créé avec succès. Vous serez contacter d\'ici peut pour utiliser l\'application. Merci !</string>
+    <string name="continuer">Continuer</string>
+    <string name="inscription_r_ussie">Inscription Réussie!</string>
+    <string name="success">Success</string>
+    <string name="conne">Connectez-vous à votre compte AkibaPay</string>
+    <string name="logout">Se deconnecter</string>
 </resources>

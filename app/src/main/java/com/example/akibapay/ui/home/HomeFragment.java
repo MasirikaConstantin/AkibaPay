@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.akibapay.R;
 import com.example.akibapay.adapter.MyAdapter;
 import com.example.akibapay.databinding.FragmentHomeBinding;
+import com.example.akibapay.utils.PrefsManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private RecyclerView recyclerView;
     private MyAdapter adapter;
-
+    private PrefsManager prefsManager;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel =
@@ -37,7 +38,7 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
+        prefsManager = PrefsManager.getInstance(getContext());
         // Initialiser le RecyclerView
         initializeRecyclerView();
 
@@ -52,6 +53,7 @@ public class HomeFragment extends Fragment {
         binding.transfertMobile.setOnClickListener(v -> {
             showTransfertBottomSheet();
         });
+        binding.bonjourNom.setText(prefsManager.getPhoneNumber());
         return root;
     }
 
@@ -82,7 +84,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    private void showPaymentBottomSheet() {
+    /*private void showPaymentBottomSheet() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_payment, null);
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -106,7 +108,7 @@ public class HomeFragment extends Fragment {
         });
 
         bottomSheetDialog.show();
-    }
+    }*/
 
     private void processPayment() {
         // Traitement du paiement
@@ -142,5 +144,97 @@ public class HomeFragment extends Fragment {
     private void processTransfert() {
         // Traitement du paiement
         Toast.makeText(requireContext(), "Transfert Validé", Toast.LENGTH_SHORT).show();
+    }
+
+
+
+
+
+
+    private void showPaymentBottomSheet() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_payment, null);
+        bottomSheetDialog.setContentView(bottomSheetView);
+
+        // Configuration du spinner
+        Spinner currencySpinner = bottomSheetView.findViewById(R.id.currency_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.currencies,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        currencySpinner.setAdapter(adapter);
+
+        // Récupérer les éléments pour la gestion du numéro de téléphone
+        com.google.android.material.textfield.TextInputEditText phoneInput =
+                bottomSheetView.findViewById(R.id.phone_input);
+        com.google.android.material.imageview.ShapeableImageView imageReseaux =
+                bottomSheetView.findViewById(R.id.imageReseaux);
+
+        // Ajouter un TextWatcher pour détecter les changements dans le numéro
+        phoneInput.addTextChangedListener(new android.text.TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                updateNetworkIcon(s.toString(), imageReseaux);
+            }
+
+            @Override
+            public void afterTextChanged(android.text.Editable s) {}
+        });
+
+        // Gestion du bouton Valider
+        Button validateButton = bottomSheetView.findViewById(R.id.validate_buttons);
+        validateButton.setOnClickListener(v -> {
+            // Logique de validation
+            processPayment();
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.show();
+    }
+
+    // Méthode pour mettre à jour l'icône du réseau
+    private void updateNetworkIcon(String phoneNumber, com.google.android.material.imageview.ShapeableImageView imageReseaux) {
+        if (phoneNumber.length() >= 3) {
+            String prefix = phoneNumber.substring(0, 3);
+
+            switch (prefix) {
+                case "091":
+                case "090":
+                    imageReseaux.setImageResource(R.drawable.afrimoney);
+                    imageReseaux.setVisibility(View.VISIBLE);
+                    break;
+                case "097":
+                case "099":
+                case "098":
+                    imageReseaux.setImageResource(R.drawable.airtel_money);
+                    imageReseaux.setVisibility(View.VISIBLE);
+                    break;
+                case "081":
+                case "082":
+                case "083":
+                    imageReseaux.setImageResource(R.drawable.mpesa);
+                    imageReseaux.setVisibility(View.VISIBLE);
+                    break;
+                case "080":
+                case "085":
+                case "084":
+                case "089":
+                    imageReseaux.setImageResource(R.drawable.orange_money);
+                    imageReseaux.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    // Orange Money (déjà défini par défaut dans le XML)
+                    //imageReseaux.setImageResource(R.drawable.orange_money);
+                    imageReseaux.setVisibility(View.GONE);
+                    break;
+            }
+        } else {
+            imageReseaux.setVisibility(View.GONE);
+        }
     }
 }

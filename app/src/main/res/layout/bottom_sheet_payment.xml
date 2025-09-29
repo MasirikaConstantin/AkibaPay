@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="20dp"
     android:background="@drawable/rounded_bottom_sheet">
@@ -41,20 +42,37 @@
     </LinearLayout>
 
     <!-- Numéro de téléphone -->
-    <com.google.android.material.textfield.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/num_ro_de_t_l_phone"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        android:orientation="horizontal">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageReseaux"
+            android:layout_width="50dp"
+            android:visibility="gone"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="num"
+            app:srcCompat="@drawable/orange_money"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"/>
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:hint="" />
+            android:hint="@string/num_ro_de_t_l_phone"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:id="@+id/phone_input"
+                android:hint="" />
 
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
     <!-- Libellé -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
