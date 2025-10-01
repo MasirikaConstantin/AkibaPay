@@ -6,6 +6,7 @@ public class PaymentRequest {
     private String fromNumber;
     private String toNumber;
     private String hash;
+    private String userId;
     private double amount;
     private String currency;
     private String callbackUrl;
@@ -15,7 +16,7 @@ public class PaymentRequest {
 
     public PaymentRequest(String merchantId, String merchantPass, String fromNumber,
                           String toNumber, String hash, double amount, String currency,
-                          String callbackUrl, String merchantReference) {
+                          String callbackUrl, String merchantReference, String userId) {
         this.merchantId = merchantId;
         this.merchantPass = merchantPass;
         this.fromNumber = fromNumber;
@@ -23,11 +24,21 @@ public class PaymentRequest {
         this.hash = hash;
         this.amount = amount;
         this.currency = currency;
+        this.userId = userId;
         this.callbackUrl = callbackUrl;
         this.merchantReference = merchantReference;
     }
 
     // Getters and Setters
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public String getMerchantId() { return merchantId; }
     public void setMerchantId(String merchantId) { this.merchantId = merchantId; }
 

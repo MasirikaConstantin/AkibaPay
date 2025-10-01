@@ -1,27 +1,29 @@
 package com.example.akibapay.models;
 
-
 public enum UserStatus {
-    ACTIVE(0),
-    INACTIVE(1),
-    SUSPENDED(2);
+    ACTIVE("Active"),
+    INACTIVE("Inactive"),
+    SUSPENDED("Suspended"),
+    DELETED("Deleted");
 
-    private final int value;
+    private final String value;
 
-    UserStatus(int value) {
+    UserStatus(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
-    public static UserStatus fromValue(int value) {
+    public static UserStatus fromValue(String value) {
+        if (value == null) return INACTIVE;
+
         for (UserStatus status : UserStatus.values()) {
-            if (status.value == value) {
+            if (status.value.equalsIgnoreCase(value)) {
                 return status;
             }
         }
-        return ACTIVE;
+        return INACTIVE;
     }
 }

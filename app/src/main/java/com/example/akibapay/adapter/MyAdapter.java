@@ -1,4 +1,3 @@
-// MyAdapter.java
 package com.example.akibapay.adapter;
 
 import android.view.LayoutInflater;
@@ -9,6 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.akibapay.R;
+import com.example.akibapay.models.Payments;
+
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -50,8 +51,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     // Méthode pour mettre à jour les données
-    public void updateData(List<String> newItems) {
-        this.items = newItems;
+    public void updateData(List<Payments> newItems) {
+        //this.items = newItems;
         notifyDataSetChanged();
     }
 

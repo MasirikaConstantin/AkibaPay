@@ -9,18 +9,26 @@
         android:id="@+id/navigation_home"
         android:name="com.example.akibapay.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_transactions"
+            app:destination="@id/navigation_transactions" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_transactions"
         android:name="com.example.akibapay.ui.transaction.TransactionsFragment"
         android:label="@string/title_transactions"
-        tools:layout="@layout/fragment_cartes" />
+        tools:layout="@layout/fragment_transactions" >
+        <action
+            android:id="@+id/action_navigation_transactions_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_carte"
         android:name="com.example.akibapay.ui.carte.CartesFragment"
-        tools:layout="@layout/fragment_transactions" />
+        tools:layout="@layout/fragment_cartes" />
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.akibapay.ui.profile.ProfileFragment"

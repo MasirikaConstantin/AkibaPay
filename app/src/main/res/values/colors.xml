@@ -5,7 +5,6 @@
     <color name="success">#4DA66B</color>
     <color name="Secondary_1">#65B91D</color>
     <color name="blue">#1D62CA</color>
-    <color name="gray" />
         <!-- Couleurs pour la navigation -->
         <color name="bottom_nav_icon_color">#FF000000</color>
         <color name="bottom_nav_text_color">#FF000000</color>
@@ -18,5 +17,9 @@
         <color name="gray_inactive">#FF9E9E9E</color>
     <color name="icon">#0B0B0B</color>
     <color name="primary_color">#FF4CAF50</color>
-
+        <color name="orange">#FF9800</color>
+        <color name="green">#4CAF50</color>
+        <color name="red">#F44336</color>
+        <color name="gray">#9E9E9E</color>
+        <color name="gray_light">#F5F5F5</color>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.akibapay.api;
 
+import com.example.akibapay.models.ApiResponse;
 import com.example.akibapay.models.Devices;
 import com.example.akibapay.models.PaymentStatus;
 import com.example.akibapay.models.Payments;
@@ -61,14 +62,12 @@ public interface ApiService {
     Call<Void> updatePayment(@Path("id") UUID paymentId, @Body PaymentCallbackRequest callbackRequest);
 
     @DELETE("/api/payments/{id}")
-    Call<Void> deletePayment(@Path("id") UUID paymentId);
+    Call<Void> deletePayment(@Path("id") String paymentId);
 
     @GET("/api/payments/status/{status}")
     Call<List<Payments>> getPaymentsByStatus(@Path("status") PaymentStatus status);
-
-    @GET("/api/payments/recent")
-    Call<List<Payments>> getRecentPayments(@Query("limit") Integer limit);
-
+    @GET("api/payments/recent")
+    Call<List<Payments>> getRecentPayments(@Query("limit") int limit);
     @POST("/api/payments")
     Call<Payments> createPayment(@Body PaymentRequest paymentRequest);
 

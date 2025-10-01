@@ -135,13 +135,13 @@
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/ex_243_810_000_000">
+                    android:hint="@string/pin">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etPin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="phone"
+                        android:inputType="numberPassword"
                         android:maxLines="1"
                         android:textSize="16sp" />
 

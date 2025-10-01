@@ -45,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // CORRECTION : Initialiser RetrofitClient AVANT de l'utiliser
         RetrofitClient.initialize(this);
 
         loadingHelper = new LoadingDialogHelper(this);
@@ -108,13 +110,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isValidPhoneNumber(String phone) {
-        // Autorise :
-        // - optionnellement un + au début
-        // - entre 9 et 13 chiffres ensuite
-        String phoneRegex = "^[+]?[0-9]{9,13}$";
+        // Format congolais : 09... ou +2439...
+        String phoneRegex = "^(09|\\+2439)[0-9]{8}$";
         return phone != null && phone.matches(phoneRegex);
     }
-
 
     private void loginUser(String phone, String pin) {
         loadingHelper.showLoading("Connexion en cours...");
@@ -141,6 +140,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Call<Void> call, Throwable t) {
                 loadingHelper.hideLoading();
                 handleLoginError("Erreur de connexion. Vérifiez votre internet.");
+                t.printStackTrace(); // CORRECTION : Ajouter des logs pour le débogage
             }
         });
     }
@@ -160,7 +160,17 @@ public class LoginActivity extends AppCompatActivity {
                     navigateToMainActivity();
                 } else {
                     String errorMessage = ErrorHandler.getErrorMessage(response);
-                    handleLoginError(errorMessage);
+                    handleLoginError("Erreur lors de la récupération du profil: " + errorMessage);
+
+                    // CORRECTION : Log détaillé pour déboguer
+                    if (response.errorBody() != null) {
+                        try {
+                            String errorBody = response.errorBody().string();
+                            System.out.println("Error body: " + errorBody);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
 
@@ -168,32 +178,47 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Call<Users> call, Throwable t) {
                 loadingHelper.hideLoading();
                 handleLoginError("Erreur de connexion lors de la récupération des données.");
+                t.printStackTrace();
             }
         });
     }
 
+    // CORRECTION : Méthode saveUserData adaptée aux nouveaux types
     private void saveUserData(Users user) {
-        // Sauvegarder les données utilisateur dans SharedPreferences
-        editor.putString(KEY_USER_ID, user.getId().toString());
-        editor.putString(KEY_PHONE_NUMBER, user.getPhoneNumber());
-        editor.putInt(KEY_USER_ROLE, user.getRole());
-        editor.putInt(KEY_USER_STATUS, user.getStatus());
-        editor.putBoolean(KEY_IS_LOGGED_IN, true);
+        try {
+            editor.putString(KEY_USER_ID, user.getId());
+            editor.putString(KEY_PHONE_NUMBER, user.getPhoneNumber());
 
-        // Sauvegarder l'objet utilisateur complet en JSON
-        Gson gson = new Gson();
-        String userJson = gson.toJson(user);
-        editor.putString(KEY_USER_DATA, userJson);
+            // CORRECTION : Sauvegarder les String au lieu des int
+            editor.putString(KEY_USER_ROLE, user.getRole());
+            editor.putString(KEY_USER_STATUS, user.getStatus());
 
-        // Sauvegarder un token de session (simulé pour l'exemple)
-        editor.putString(KEY_SESSION_TOKEN, "session_" + System.currentTimeMillis());
+            editor.putBoolean(KEY_IS_LOGGED_IN, true);
 
-        editor.apply();
+            // Sauvegarder l'objet utilisateur complet en JSON
+            Gson gson = new Gson();
+            String userJson = gson.toJson(user);
+            editor.putString(KEY_USER_DATA, userJson);
 
-        // Log pour débogage
-        Toast.makeText(this, "Bienvenue " + user.getPhoneNumber() + "!", Toast.LENGTH_SHORT).show();
+            // Sauvegarder un token de session
+            editor.putString(KEY_SESSION_TOKEN, "session_" + System.currentTimeMillis());
+
+            boolean success = editor.commit();
+
+            if (success) {
+                String welcomeMessage = "Bienvenue " + user.getPhoneNumber();
+                if (user.getRole() != null) {
+                    welcomeMessage += " (" + user.getRoleDisplayName() + ")";
+                }
+                Toast.makeText(this, welcomeMessage, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Erreur lors de la sauvegarde des données", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Erreur lors de la sauvegarde: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
-
     private void navigateToMainActivity() {
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -216,7 +241,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // Méthode pour gérer la déconnexion
+    // CORRECTION : Méthode logout améliorée
     public void logout() {
         String userId = sharedPreferences.getString(KEY_USER_ID, null);
         if (userId != null) {
@@ -242,8 +267,19 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // CORRECTION : Méthode clearUserData améliorée
     private void clearUserData() {
-        RegisterActivity.logoutUser(sharedPreferences);
+        try {
+            editor.clear();
+            boolean success = editor.commit();
+
+            if (!success) {
+                // Fallback: utiliser apply() si commit() échoue
+                editor.clear().apply();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Rediriger vers le login
         Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
@@ -252,13 +288,43 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    // Méthode utilitaire pour récupérer l'utilisateur connecté
     public static Users getLoggedInUser(SharedPreferences prefs) {
-        return RegisterActivity.getLoggedInUser(prefs);
+        try {
+            String userJson = prefs.getString(KEY_USER_DATA, null);
+            if (userJson != null) {
+                Gson gson = new Gson();
+                return gson.fromJson(userJson, Users.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    // Méthode utilitaire pour vérifier si un utilisateur est connecté
+    public static String getUserRole(SharedPreferences prefs) {
+        return prefs.getString(KEY_USER_ROLE, "Utilisateur");
+    }
+
+    public static String getUserStatus(SharedPreferences prefs) {
+        return prefs.getString(KEY_USER_STATUS, "Inactif");
+    }
+
+    public static boolean isUserActive(SharedPreferences prefs) {
+        String status = prefs.getString(KEY_USER_STATUS, "Inactif");
+        return "Active".equalsIgnoreCase(status);
+    }
+
+    public static boolean isUserCaissier(SharedPreferences prefs) {
+        String role = prefs.getString(KEY_USER_ROLE, "Utilisateur");
+        return "Caissier".equalsIgnoreCase(role);
+    }
+
+    public static boolean isUserAdmin(SharedPreferences prefs) {
+        String role = prefs.getString(KEY_USER_ROLE, "Utilisateur");
+        return "Admin".equalsIgnoreCase(role) || "SuperAdmin".equalsIgnoreCase(role);
+    }
+
     public static boolean isUserLoggedIn(SharedPreferences prefs) {
-        return RegisterActivity.isUserLoggedIn(prefs);
+        return prefs.getBoolean(KEY_IS_LOGGED_IN, false);
     }
 }

@@ -24,7 +24,6 @@
             android:textSize="28sp"
             android:textStyle="bold"
             android:text="@string/mon_profi"
-            android:textAppearance="@style/mes_transac"
             android:translationY="-2.88sp" />
     </LinearLayout>
 
@@ -49,7 +48,7 @@
         tools:layout_editor_absoluteX="1dp">
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/TxRole"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -173,6 +172,23 @@
 
 
     </LinearLayout>
+    <!-- Ajouter cette vue pour indiquer le statut de connexion -->
+
+    <TextView
+        android:id="@+id/connectionStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_marginStart="342dp"
+        android:layout_marginEnd="258dp"
+        android:text="Connecté"
+        android:textColor="@color/green"
+        android:textSize="14sp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout7"
+        tools:visibility="visible" />
 
     <com.google.android.material.button.MaterialButton
 
@@ -180,7 +196,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
         android:backgroundTint="@color/red"
@@ -192,7 +207,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout7"
-        app:layout_constraintVertical_bias="0.165" />
+        app:layout_constraintTop_toBottomOf="@+id/connectionStatus"
+        app:layout_constraintVertical_bias="0.129" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

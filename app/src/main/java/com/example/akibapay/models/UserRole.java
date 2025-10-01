@@ -1,26 +1,37 @@
 package com.example.akibapay.models;
 
 public enum UserRole {
-    USER(0),
-    AGENT(1),
-    ADMIN(2);
+    CAISSIER("Caissier"),
+    ADMIN("Admin"),
+    SUPER_ADMIN("SuperAdmin");
 
-    private final int value;
+    private final String value;
 
-    UserRole(int value) {
+    UserRole(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
-    public static UserRole fromValue(int value) {
+    public static UserRole fromValue(String value) {
+        if (value == null) return CAISSIER;
+
         for (UserRole role : UserRole.values()) {
-            if (role.value == value) {
+            if (role.value.equalsIgnoreCase(value)) {
                 return role;
             }
         }
-        return USER;
+        return CAISSIER;
+    }
+
+    public String getDisplayName() {
+        switch (this) {
+            case CAISSIER: return "Caissier";
+            case ADMIN: return "Administrateur";
+            case SUPER_ADMIN: return "Super Administrateur";
+            default: return "Utilisateur";
+        }
     }
 }

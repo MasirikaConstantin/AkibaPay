@@ -38,7 +38,7 @@
     <string name="transfert_m">Transfert M-Money</string>
     <string name="bonjour">Bonjour</string>
     <string name="img">img</string>
-    <string name="derniers_mo">Derniers mouvements</string>
+    <string name="derniers_mo">Dernières Transactions</string>
     <string name="tous_voir">Tous voir</string>
     <string name="walmart">Joe Doe - 0810 000 000</string>
     <string name="today">Aujourd\'hui à</string>
@@ -65,4 +65,5 @@
     <string name="success">Success</string>
     <string name="conne">Connectez-vous à votre compte AkibaPay</string>
     <string name="logout">Se deconnecter</string>
+    <string name="logo_de_l_application">Logo de l\'application</string>
 </resources>

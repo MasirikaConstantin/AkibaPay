@@ -52,8 +52,8 @@ public class PrefsManager {
     public void saveUserData(Users user) {
         editor.putString(KEY_USER_ID, user.getId().toString());
         editor.putString(KEY_PHONE_NUMBER, user.getPhoneNumber());
-        editor.putInt(KEY_USER_ROLE, user.getRole());
-        editor.putInt(KEY_USER_STATUS, user.getStatus());
+        editor.putString(KEY_USER_ROLE, user.getRole());
+        editor.putString(KEY_USER_STATUS, user.getStatus());
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
 
         // Sauvegarder l'objet complet
@@ -157,8 +157,8 @@ public class PrefsManager {
         return prefs.getString(KEY_PHONE_NUMBER, "");
     }
 
-    public int getUserRole() {
-        return prefs.getInt(KEY_USER_ROLE, 0);
+    public String getUserRole() {
+        return prefs.getString(KEY_USER_ROLE, "");
     }
 
     public int getUserStatus() {

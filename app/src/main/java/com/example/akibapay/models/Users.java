@@ -1,13 +1,11 @@
 package com.example.akibapay.models;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
 public class Users {
     private String id;
     private String phoneNumber;
     private String pinHash;
-    private int role;
-    private int status;
+    private String role; // CORRECTION : Changé de int à String
+    private String status; // CORRECTION : Changé de int à String
     private String createdAt;
     private String updatedAt;
 
@@ -21,15 +19,38 @@ public class Users {
     public String getPinHash() { return pinHash; }
     public void setPinHash(String pinHash) { this.pinHash = pinHash; }
 
-    public int getRole() { return role; }
-    public void setRole(int role) { this.role = role; }
+    public String getRole() { return role; } // CORRECTION : String
+    public void setRole(String role) { this.role = role; }
 
-    public int getStatus() { return status; }
-    public void setStatus(int status) { this.status = status; }
+    public String getStatus() { return status; } // CORRECTION : String
+    public void setStatus(String status) { this.status = status; }
 
     public String getCreatedAt() { return createdAt; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 
     public String getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
+
+    // Méthodes utilitaires pour faciliter l'utilisation
+    public boolean isActive() {
+        return "Active".equalsIgnoreCase(status);
+    }
+
+    public boolean isCaissier() {
+        return "Caissier".equalsIgnoreCase(role);
+    }
+
+    public boolean isAdmin() {
+        return "Admin".equalsIgnoreCase(role);
+    }
+
+    public String getRoleDisplayName() {
+        if (role == null) return "Utilisateur";
+        switch (role.toLowerCase()) {
+            case "caissier": return "Caissier";
+            case "admin": return "Administrateur";
+            case "superadmin": return "Super Administrateur";
+            default: return role;
+        }
+    }
 }

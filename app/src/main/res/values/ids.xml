@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="cancelButton" type="id" />
+    <item name="timerText" type="id" />
+    <item name="statusText" type="id" />
+    <item name="bottom_sheet_payment_status" type="id" />
+    <item name="receipt_currency" type="id" />
+    <item name="receipt_status" type="id" />
+    <item name="receipt_to_number" type="id" />
+    <item name="receipt_merchant_ref" type="id" />
+</resources>
