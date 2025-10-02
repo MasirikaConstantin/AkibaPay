@@ -11,10 +11,10 @@
         android:icon="@drawable/money_exchange"
         android:title="@string/title_transactions" />
 
-    <item
+    <!--item
         android:id="@+id/navigation_carte"
         android:icon="@drawable/bank_card_2_line_1_"
-        android:title="@string/title_carte" />
+        android:title="@string/title_carte" /-->
 
     <item
         android:id="@+id/navigation_profile"

@@ -1,6 +1,7 @@
 package com.example.akibapay.api;
 
 import com.example.akibapay.models.ApiResponse;
+import com.example.akibapay.models.DailyStats;
 import com.example.akibapay.models.Devices;
 import com.example.akibapay.models.PaymentStatus;
 import com.example.akibapay.models.Payments;
@@ -70,6 +71,8 @@ public interface ApiService {
     Call<List<Payments>> getRecentPayments(@Query("limit") int limit);
     @POST("/api/payments")
     Call<Payments> createPayment(@Body PaymentRequest paymentRequest);
+    @GET("/api/payments/daily/stats/{id}")
+    Call<List<DailyStats>> getDailyStats(@Path("id") String userId);
 
     // ==================== SESSIONS ====================
 

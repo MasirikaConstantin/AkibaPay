@@ -111,17 +111,40 @@
                     android:textAppearance="@style/montant_jou"
                     android:translationY="-1.44sp" />
 
-                <TextView
-                    android:id="@+id/some_id"
-                    android:layout_width="123dp"
-                    android:layout_height="54dp"
-                    android:gravity="center_horizontal|top"
-                    android:lineSpacingExtra="9sp"
-                    android:text="@string/some_id"
-                    android:textSize="36sp"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/some_id"
-                    android:translationY="-4.32sp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ProgressBar
+                    android:id="@+id/amountProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone" />
+                    <TextView
+                        android:id="@+id/amountTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal|top"
+                        android:lineSpacingExtra="9sp"
+                        android:text="@string/some_id"
+                        android:textSize="36sp"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/some_id"
+                        android:translationY="-4.32sp" />
+
+                    <TextView
+                        android:id="@+id/currencySymbol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal|top"
+                        android:lineSpacingExtra="9sp"
+                        android:text="$"
+                        android:textSize="36sp"
+                        android:textAlignment="center"
+                        android:textAppearance="@style/some_id"
+                        android:translationY="-4.32sp" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -162,7 +185,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+                <!--LinearLayout
                     android:id="@+id/transfert_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -186,7 +209,7 @@
                         android:textAppearance="@style/transfert_m"
                         android:translationY="-1.44sp" />
 
-                </LinearLayout>
+                </LinearLayout-->
 
             </LinearLayout>
 

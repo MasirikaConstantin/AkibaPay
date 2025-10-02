@@ -1,6 +1,8 @@
 package com.example.akibapay.ui.home;
 
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -18,11 +21,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +34,7 @@ import com.example.akibapay.api.ApiService;
 import com.example.akibapay.api.RetrofitClient;
 import com.example.akibapay.databinding.FragmentHomeBinding;
 import com.example.akibapay.helper.LoadingDialogHelper;
+import com.example.akibapay.models.DailyStats;
 import com.example.akibapay.models.Payments;
 import com.example.akibapay.request.PaymentRequest;
 import com.example.akibapay.ui.transaction.TransactionDetailActivity;
@@ -40,8 +42,12 @@ import com.example.akibapay.utils.ErrorHandler;
 import com.example.akibapay.utils.PrefsManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -56,8 +62,11 @@ public class HomeFragment extends Fragment {
     private List<Payments> paymentList = new ArrayList<>();
     private LoadingDialogHelper loadingHelper;
     private PrefsManager prefsManager;
-
+    private Map<String, DailyStats> currencyStatsMap = new HashMap<>();
+    private String selectedCurrency = "CDF";
+    private List<DailyStats> dailyStatsList = new ArrayList<>();
     private static final String TAG = "HomeFragment";
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -70,19 +79,211 @@ public class HomeFragment extends Fragment {
         prefsManager = PrefsManager.getInstance(getContext());
         loadingHelper = new LoadingDialogHelper(requireContext());
 
-        // Initialiser les vues AVEC LE BINDING
         initializeViews();
         initializeRecyclerView();
         loadRecentPayments();
-
-        // Observer les données du ViewModel si nécessaire
-        homeViewModel.getText().observe(getViewLifecycleOwner(), text -> {
-            // binding.textHome.setText(text); // Décommentez si vous voulez utiliser le texte
-        });
-
+        setupUI();
         setupClickListeners();
 
+        homeViewModel.getText().observe(getViewLifecycleOwner(), text -> {
+            // binding.textHome.setText(text);
+        });
+
         return root;
+    }
+
+    private void setupUI() {
+        // Configurer le spinner des devises
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.currencies,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.currencySpinner.setAdapter(adapter);
+
+        // Ajouter un spinner pour le montant
+        setupAmountSpinner();
+
+        // Gérer le changement de devise
+        binding.currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedCurrency = parent.getItemAtPosition(position).toString();
+                updateBalanceDisplay();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Ne rien faire
+            }
+        });
+    }
+
+    private void setupAmountSpinner() {
+        // Afficher le spinner de chargement pour le montant
+        binding.amountProgressBar.setVisibility(View.VISIBLE);
+        binding.amountTextView.setVisibility(View.GONE);
+        binding.currencySymbol.setVisibility(View.GONE);
+    }
+
+    private void hideAmountSpinner() {
+        // Cacher le spinner et afficher le montant
+        binding.amountProgressBar.setVisibility(View.GONE);
+        binding.amountTextView.setVisibility(View.VISIBLE);
+        binding.currencySymbol.setVisibility(View.VISIBLE);
+    }
+
+    private void loadDailyStats() {
+        String userId = prefsManager.getUserId();
+        if (userId == null || userId.isEmpty()) {
+            showZeroBalance();
+            return;
+        }
+
+        // Afficher le spinner pendant le chargement
+        setupAmountSpinner();
+
+        ApiService apiService = RetrofitClient.getApiService();
+        Call<List<DailyStats>> call = apiService.getDailyStats(userId);
+
+        call.enqueue(new Callback<List<DailyStats>>() {
+            @Override
+            public void onResponse(Call<List<DailyStats>> call, Response<List<DailyStats>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    dailyStatsList.clear();
+                    currencyStatsMap.clear();
+
+                    List<DailyStats> stats = response.body();
+                    dailyStatsList.addAll(stats);
+
+                    // Convertir la liste en Map pour un accès facile
+                    for (DailyStats stat : dailyStatsList) {
+                        currencyStatsMap.put(stat.getCurrency(), stat);
+                    }
+
+                    updateBalanceDisplay();
+
+                    // Log pour débogage
+                    Log.d("DailyStats", "Loaded stats: " + dailyStatsList.size() + " currencies");
+                    for (DailyStats stat : dailyStatsList) {
+                        Log.d("DailyStats", stat.getCurrency() + ": " + stat.getTotalAmount());
+                    }
+                } else {
+                    Log.e("DailyStats", "Error loading stats: " + response.code());
+                    showDefaultBalance();
+                }
+
+                hideAmountSpinner();
+            }
+
+            @Override
+            public void onFailure(Call<List<DailyStats>> call, Throwable t) {
+                Log.e("DailyStats", "Network error: " + t.getMessage());
+                showDefaultBalance();
+                hideAmountSpinner();
+            }
+        });
+    }
+
+    private void updateBalanceDisplay() {
+        if (currencyStatsMap.containsKey(selectedCurrency)) {
+            DailyStats stats = currencyStatsMap.get(selectedCurrency);
+            displayBalance(stats);
+        } else {
+            // Si la devise sélectionnée n'est pas disponible, afficher 0
+            showZeroBalance();
+        }
+    }
+
+    private void displayBalance(DailyStats stats) {
+        if (stats != null) {
+            String formattedAmount = formatAmount(stats.getTotalAmount(), selectedCurrency);
+
+            // Mettre à jour le montant
+            binding.amountTextView.setText(formattedAmount);
+
+            // Mettre à jour le symbole de devise basé sur la sélection du spinner
+            updateCurrencySymbol(selectedCurrency);
+
+            // Appliquer la couleur normale pour le montant
+            try {
+                int textColor = ContextCompat.getColor(requireContext(), R.color.black);
+                binding.amountTextView.setTextColor(textColor);
+            } catch (Resources.NotFoundException e) {
+                binding.amountTextView.setTextColor(Color.BLACK);
+            }
+
+            // Log pour débogage
+            Log.d("DisplayBalance", "Currency: " + selectedCurrency + ", Amount: " + formattedAmount);
+        } else {
+            showZeroBalance();
+        }
+    }
+
+    private void updateCurrencySymbol(String currency) {
+        if (binding.currencySymbol != null) {
+            switch (currency.toUpperCase()) {
+                case "USD":
+                    binding.currencySymbol.setText("$");
+                    break;
+                case "CDF":
+                    binding.currencySymbol.setText("FC");
+                    break;
+                default:
+                    binding.currencySymbol.setText(currency);
+            }
+        }
+    }
+
+    private String formatAmount(double amount, String currency) {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.getDefault());
+
+        // Ajuster le formatage selon la devise
+        switch (currency) {
+            case "CDF":
+                numberFormat.setMinimumFractionDigits(0);
+                numberFormat.setMaximumFractionDigits(0);
+                break;
+            case "USD":
+                numberFormat.setMinimumFractionDigits(2);
+                numberFormat.setMaximumFractionDigits(2);
+                break;
+            default:
+                numberFormat.setMinimumFractionDigits(2);
+                numberFormat.setMaximumFractionDigits(2);
+        }
+
+        return numberFormat.format(amount);
+    }
+
+    private void showZeroBalance() {
+        try {
+            binding.amountTextView.setText("0");
+            updateCurrencySymbol(selectedCurrency);
+
+            // Appliquer la couleur grise
+            int grayColor;
+            try {
+                grayColor = ContextCompat.getColor(requireContext(), R.color.gray);
+            } catch (Resources.NotFoundException e) {
+                grayColor = Color.parseColor("#9E9E9E"); // Gray 500 material
+            }
+
+            binding.amountTextView.setTextColor(grayColor);
+
+        } catch (Exception e) {
+            Log.e("HomeFragment", "Error in showZeroBalance", e);
+            binding.amountTextView.setText("0");
+            binding.amountTextView.setTextColor(Color.GRAY);
+        }
+    }
+
+    private void showDefaultBalance() {
+        // En cas d'erreur, afficher une valeur par défaut
+        binding.amountTextView.setText("--");
+        updateCurrencySymbol(selectedCurrency);
+        binding.amountTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray));
     }
 
     private void initializeViews() {
@@ -93,15 +294,14 @@ public class HomeFragment extends Fragment {
 
         // Définir le nom d'utilisateur
         binding.bonjourNom.setText(prefsManager.getPhoneNumber());
+
+        // Initialiser l'affichage du montant avec spinner
+        setupAmountSpinner();
     }
 
     private void setupClickListeners() {
         binding.initierUneCollecte.setOnClickListener(v -> {
             showPaymentBottomSheet();
-        });
-
-        binding.transfertMobile.setOnClickListener(v -> {
-            showTransfertBottomSheet();
         });
     }
 
@@ -197,6 +397,7 @@ public class HomeFragment extends Fragment {
 
     // Pour rafraîchir les données
     public void refreshData() {
+        loadDailyStats();
         loadRecentPayments();
     }
 
@@ -204,35 +405,6 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    private void showTransfertBottomSheet() {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_transfert, null);
-        bottomSheetDialog.setContentView(bottomSheetView);
-
-        // Configuration du spinner
-        Spinner currencySpinner = bottomSheetView.findViewById(R.id.currency_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.currencies,
-                android.R.layout.simple_spinner_item
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        currencySpinner.setAdapter(adapter);
-
-        // Gestion du bouton Valider
-        Button validateButton = bottomSheetView.findViewById(R.id.validate_buttons);
-        validateButton.setOnClickListener(v -> {
-            processTransfert();
-            bottomSheetDialog.dismiss();
-        });
-
-        bottomSheetDialog.show();
-    }
-
-    private void processTransfert() {
-        Toast.makeText(requireContext(), "Transfert Validé", Toast.LENGTH_SHORT).show();
     }
 
     private void showPaymentBottomSheet() {
@@ -336,7 +508,6 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<Payments> call, Response<Payments> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Payments payment = response.body();
-                    // CORRECTION : Utiliser payment.getId() directement (c'est un String)
                     monitorPaymentStatus(payment.getId(), statusBottomSheet, 0);
                 } else {
                     statusBottomSheet.dismiss();
@@ -360,11 +531,12 @@ public class HomeFragment extends Fragment {
                 .setPositiveButton("OK", null)
                 .show();
     }
+
     private BottomSheetDialog createPaymentStatusBottomSheet() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext());
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_payment_status, null);
         bottomSheetDialog.setContentView(bottomSheetView);
-        bottomSheetDialog.setCancelable(false); // Empêcher la fermeture pendant le traitement
+        bottomSheetDialog.setCancelable(false);
 
         // Références aux vues
         ProgressBar progressBar = bottomSheetView.findViewById(R.id.progressBar);
@@ -384,14 +556,11 @@ public class HomeFragment extends Fragment {
         return bottomSheetDialog;
     }
 
-
-
     private void monitorPaymentStatus(String paymentId, BottomSheetDialog statusBottomSheet, int attemptCount) {
-        final int MAX_ATTEMPTS = 15; // 30 secondes (15 tentatives × 2 secondes)
-        final int DELAY_BETWEEN_ATTEMPTS = 2000; // 2 secondes
+        final int MAX_ATTEMPTS = 15;
+        final int DELAY_BETWEEN_ATTEMPTS = 2000;
 
         if (attemptCount >= MAX_ATTEMPTS) {
-            // CORRECTION : Timeout après 30 secondes - ouvrir les détails de la transaction
             statusBottomSheet.dismiss();
             showPaymentTimeoutAndOpenDetails(paymentId);
             return;
@@ -412,7 +581,6 @@ public class HomeFragment extends Fragment {
                         Payments payment = response.body();
                         String status = payment.getStatus();
 
-                        // CORRECTION : Utilisation simplifiée et robuste
                         if (status != null) {
                             String upperStatus = status.toUpperCase();
 
@@ -424,34 +592,29 @@ public class HomeFragment extends Fragment {
                                 statusBottomSheet.dismiss();
                                 showPaymentFailed(payment);
                             } else {
-                                // PENDING ou autre - continuer le monitoring
                                 monitorPaymentStatus(paymentId, statusBottomSheet, attemptCount + 1);
                             }
                         } else {
-                            // Statut null - continuer le monitoring
                             monitorPaymentStatus(paymentId, statusBottomSheet, attemptCount + 1);
                         }
                     } else {
-                        // Erreur API - continuer le monitoring
                         monitorPaymentStatus(paymentId, statusBottomSheet, attemptCount + 1);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Payments> call, Throwable t) {
-                    // Erreur réseau - continuer le monitoring
                     monitorPaymentStatus(paymentId, statusBottomSheet, attemptCount + 1);
                 }
             });
         }, DELAY_BETWEEN_ATTEMPTS);
     }
-    // CORRECTION : Nouvelle méthode pour gérer le timeout avec ouverture des détails
+
     private void showPaymentTimeoutAndOpenDetails(String paymentId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Délai dépassé ⏰")
                 .setMessage("Aucune réponse du client après 30 secondes. La transaction est en attente de confirmation. Voulez-vous voir les détails de la transaction ?")
                 .setPositiveButton("Voir les détails", (dialog, which) -> {
-                    // Ouvrir les détails de la transaction
                     openTransactionDetails(paymentId);
                 })
                 .setNegativeButton("Fermer", null)
@@ -469,50 +632,6 @@ public class HomeFragment extends Fragment {
             Toast.makeText(requireContext(), "Erreur lors de l'ouverture des détails", Toast.LENGTH_SHORT).show();
         }
     }
-
-    private boolean isPaymentSuccess(Object status) {
-        if (status == null) return false;
-
-        if (status instanceof String) {
-            String statusStr = (String) status;
-            return "SUCCESS".equalsIgnoreCase(statusStr);
-        } else if (status instanceof Integer) {
-            int statusInt = (Integer) status;
-            return statusInt == 1; // Ancien code pour succès
-        }
-
-        return false;
-    }
-
-    private boolean isPaymentFailed(Object status) {
-        if (status == null) return false;
-
-        if (status instanceof String) {
-            String statusStr = (String) status;
-            return "FAILED".equalsIgnoreCase(statusStr) || "CANCELLED".equalsIgnoreCase(statusStr);
-        } else if (status instanceof Integer) {
-            int statusInt = (Integer) status;
-            return statusInt == 2 || statusInt == 3; // Ancien code pour échec ou annulé
-        }
-
-        return false;
-    }
-
-    private boolean isPaymentPending(Object status) {
-        if (status == null) return false;
-
-        if (status instanceof String) {
-            String statusStr = (String) status;
-            return "PENDING".equalsIgnoreCase(statusStr);
-        } else if (status instanceof Integer) {
-            int statusInt = (Integer) status;
-            return statusInt == 0; // Ancien code pour en attente
-        }
-
-        return false;
-    }
-
-
 
     private void updateStatusBottomSheet(BottomSheetDialog statusBottomSheet, int attemptCount) {
         View bottomSheetView = statusBottomSheet.findViewById(android.R.id.content);
@@ -540,7 +659,7 @@ public class HomeFragment extends Fragment {
             }
 
             if (progressBar != null) {
-                int progress = (attemptCount * 100) / 15; // 15 tentatives max
+                int progress = (attemptCount * 100) / 15;
                 progressBar.setProgress(Math.min(progress, 100));
             }
         }
@@ -552,7 +671,6 @@ public class HomeFragment extends Fragment {
                 .setMessage("Votre paiement de " + payment.getAmount() + " " + payment.getCurrency() +
                         " vers " + payment.getToNumber() + " a été effectué avec succès.")
                 .setPositiveButton("OK", (dialog, which) -> {
-                    // Optionnel : ouvrir les détails
                     openTransactionDetails(payment.getId().toString());
                 })
                 .setNegativeButton("Fermer", null)
@@ -583,17 +701,14 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
-    private void showPaymentTimeout() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Délai dépassé ⏰")
-                .setMessage("Aucune réponse du client après 20 secondes. La transaction est en attente de confirmation.")
-                .setPositiveButton("OK", null)
-                .show();
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Rafraîchir les données quand le fragment redevient visible
+        loadDailyStats();
+        loadRecentPayments();
     }
 
-
-
-    // Méthode pour mettre à jour l'icône du réseau
     private void updateNetworkIcon(String phoneNumber, com.google.android.material.imageview.ShapeableImageView imageReseaux) {
         if (phoneNumber.length() >= 3) {
             String prefix = phoneNumber.substring(0, 3);

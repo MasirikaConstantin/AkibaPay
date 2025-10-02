@@ -305,4 +305,11 @@ public class TransactionsFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Rafraîchir les données quand le fragment redevient visible
+        loadAllTransactions();
+    }
 }

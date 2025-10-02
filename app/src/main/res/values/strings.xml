@@ -33,7 +33,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="profile_notifications">Mon Profil</string>
     <string name="montant_jou">Montant journalier collecté</string>
-    <string name="some_id">0.00 $</string>
+    <string name="some_id">0.00</string>
     <string name="initier_une">Initier une collecte</string>
     <string name="transfert_m">Transfert M-Money</string>
     <string name="bonjour">Bonjour</string>
