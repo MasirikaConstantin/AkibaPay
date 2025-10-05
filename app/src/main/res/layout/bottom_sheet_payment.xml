@@ -40,11 +40,23 @@
             android:layout_marginBottom="16dp" />
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Entrer les coordonées du client, le numero doit commencer par 0..."/>
+
+        </LinearLayout>
 
     <!-- Numéro de téléphone -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="12dp"
         android:orientation="horizontal">
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageReseaux"
@@ -58,36 +70,21 @@
             app:shapeAppearanceOverlay="@style/RoundedImageView"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/num_ro_de_t_l_phone"
+            android:layout_weight="1"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone"
+                android:hint="@string/num_ro_de_t_l_phone"
                 android:id="@+id/phone_input"
-                android:hint="" />
+                />
 
-        </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout> </LinearLayout>
 
-    </LinearLayout>
-    <!-- Libellé
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Libellé"
-        android:layout_marginTop="12dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </com.google.android.material.textfield.TextInputLayout>-->
-
-    <!-- Montant et Devise -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
